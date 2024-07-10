@@ -45,4 +45,5 @@ for(const file of commandFiles) {
     client.commands.set(command.data.name, command);
     commands.push(command.data.toJSON());
 }
+console.log(commands);
 
