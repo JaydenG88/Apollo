@@ -17,14 +17,7 @@ const client = new Client({
       GatewayIntentBits.GuildMessages  
      ]});
 
-client.login(TOKEN);
 
-client.once("ready", () => {
-    console.log("Ready!");
-    });
-       
-client.on("error", console.error);
-client.on("warn", console.warn);
 
 client.player = new Player(client, {
     ytdlOptions: {
@@ -42,8 +35,45 @@ for(const file of commandFiles) {
     
     const filePath = `./commands/${file}`;
     const command = require(filePath);
+
     client.commands.set(command.data.name, command);
     commands.push(command.data.toJSON());
-}
-console.log(commands);
 
+}
+
+client.on("ready", async () => {
+    const guildIDs = client.guilds.cache.map(guild => guild.id);
+    const rest = new REST({ version: "9" }).setToken(TOKEN);
+
+    for (const guildID of guildIDs) {
+
+        try {
+            await rest.put(
+                Routes.applicationGuildCommands(CLIENT_ID, guildID),
+                { body: commands }
+            );
+            console.log(`Successfully updated commands for guild ${guildID}`);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+});
+
+
+client.on("interactionCreate", async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: "Error executing command" });
+    }
+});
+
+
+client.login(TOKEN);
