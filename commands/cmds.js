@@ -5,8 +5,10 @@ module.exports = {
         .setName("cmds")
         .setDescription("Replies with bot cmds"),
     
-    async execute(interaction) {
+    async execute({client, interaction}) {
+        
         let commandsList = "My commands are:\n================\n";
+
         interaction.client.commands.forEach(command => {
             commandsList += `**/${command.data.name}:** ${command.data.description}\n`;
         });
