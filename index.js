@@ -4,7 +4,6 @@ const dotenv = require("dotenv");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const fs = require("node:fs");
-const { YouTubeExtractor } = require('@discord-player/extractor');
 
 require("dotenv").config();
 const TOKEN = process.env.TOKEN;

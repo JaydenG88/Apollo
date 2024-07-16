@@ -52,7 +52,9 @@ module.exports = {
             }
 
             const song = result.tracks[0];
+           
             await queue.addTrack(song);
+
 
             embed
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
@@ -97,13 +99,11 @@ module.exports = {
                 .setFooter({ text: `Duration: ${song.duration}` });
         }
 
-        try {
-            if (!queue.playing) await queue.play(queue.tracks.store, queue.options);
-            await interaction.reply({ embeds: [embed] });
+        if (!queue.playing) {
+            await queue.play(queue.tracks.store, queue.options);
+        }
 
-        } catch (error) {
-            console.error('Error occurred while trying to play queue:', error);
-        }        
+        await interaction.reply({ embeds: [embed] });
 
     }
 };
