@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const fs = require("node:fs");
-const { getDefaultHighWaterMark } = require("node:stream");
+const { YouTubeExtractor } = require('@discord-player/extractor');
 
 require("dotenv").config();
 const TOKEN = process.env.TOKEN;
@@ -17,14 +17,15 @@ const client = new Client({
       GatewayIntentBits.GuildMessages  
      ]});
 
-
-
 client.player = new Player(client, {
     ytdlOptions: {
         quality: "highestaudio",
         highWaterMark: 1<< 25
     }
 });
+
+client.player.extractors.loadDefault(); 
+
 
 const commands = [];
 client.commands = new Collection();
@@ -59,7 +60,6 @@ client.on("ready", async () => {
     }
 });
 
-
 client.on("interactionCreate", async interaction => {
     if (!interaction.isCommand()) return;
 
@@ -74,9 +74,5 @@ client.on("interactionCreate", async interaction => {
         await interaction.reply({ content: "Error executing command" });
     }
 });
-
-
-
-
 
 client.login(TOKEN);
