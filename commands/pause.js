@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require('discord.js');
-const { Player } = require("discord-player");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,10 +14,15 @@ module.exports = {
             return;
         }
 
+        const currentTrack = queue.currentTrack;
 
+        const embed = new EmbedBuilder()
+        .setDescription(`**Paused: [${currentTrack.title}](${currentTrack.url})** `)
+        .setThumbnail(currentTrack.thumbnail);
+        
         queue.node.pause();
 
-        await interaction.reply("Paused")
+        await interaction.reply({embeds:[embed]});
 
     }
     

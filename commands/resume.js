@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require('discord.js');
-const { Player } = require("discord-player");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,11 +13,15 @@ module.exports = {
             await interaction.reply("There is no song playing.");
             return;
         }
+        const currentTrack = queue.currentTrack;
 
+        const embed = new EmbedBuilder()
+        .setDescription(`**Resumed: [${currentTrack.title}](${currentTrack.url})** `)
+        .setThumbnail(currentTrack.thumbnail);
 
         queue.node.resume();
 
-        await interaction.reply("resumed")
+        await interaction.reply({embeds:[embed]});
 
     }
     

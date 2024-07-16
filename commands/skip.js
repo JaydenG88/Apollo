@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require('discord.js');
-const { Player } = require("discord-player");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,15 +8,20 @@ module.exports = {
     execute: async ({client, interaction}) => {
         
         const queue = client.player.nodes.get(interaction.guild);
-        console.log(queue);
 
         if (!queue) {
             await interaction.reply("There is no song playing.");
             return;
         }
 
-        queue.node.skip();
+        const currentTrack = queue.currentTrack;
 
-        await interaction.reply("Skipped.");
+        const embed = new EmbedBuilder()
+            .setDescription(`**Skipped: [${currentTrack.title}](${currentTrack.url})** `)
+            .setThumbnail(currentTrack.thumbnail);
+
+        queue.node.skip();
+        
+        await interaction.reply({embeds:[embed]});
     }
 };

@@ -17,12 +17,6 @@ module.exports = {
                 .setName('playlist')
                 .setDescription('Plays a playlist from a YouTube URL')
                 .addStringOption(option => option.setName('url').setDescription('The playlist\'s URL').setRequired(true))
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('search')
-                .setDescription('Searches for songs based on keywords')
-                .addStringOption(option => option.setName('searchterms').setDescription('The keywords').setRequired(true))
         ),
 
     execute: async ({ client, interaction }) => {
@@ -79,25 +73,7 @@ module.exports = {
                 .setDescription(`**[${result.tracks.length} songs from ${playlist.title}](${playlist.url})** have been added to the Queue`)
                 .setThumbnail(playlist.thumbnail);
 
-        } else if (interaction.options.getSubcommand() === 'search') {
-            let searchTerms = interaction.options.getString('searchterms');
-            const result = await client.player.search(searchTerms, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.AUTO,
-            });
-
-            if (result.tracks.length === 0) {
-                return interaction.reply("No results");
-            }
-
-            const song = result.tracks[0];
-            await queue.addTrack(song);
-
-            embed
-                .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
-                .setThumbnail(song.thumbnail)
-                .setFooter({ text: `Duration: ${song.duration}` });
-        }
+        } 
 
         if (!queue.playing) {
             await queue.play(queue.tracks.store, queue.options);

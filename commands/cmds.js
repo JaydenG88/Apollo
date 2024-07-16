@@ -1,4 +1,5 @@
 const {SlashCommandBuilder} = require("@discordjs/builders");
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,8 +13,10 @@ module.exports = {
         interaction.client.commands.forEach(command => {
             commandsList += `**/${command.data.name}:** ${command.data.description}\n`;
         });
-        commandsList += "================\n";
         
-        await interaction.reply(commandsList);
+        const embed = new EmbedBuilder()
+            .setDescription(commandsList);
+
+        await interaction.reply({embeds:[embed]});
     }
 };
