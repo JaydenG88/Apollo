@@ -1,4 +1,4 @@
-const {SlashCommandBuilder} = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
         .setName("cmds")
         .setDescription("Replies with bot cmds"),
     
-    async execute({client, interaction}) {
+    async execute({ client, interaction }) {
         
         let commandsList = "My commands are:\n================\n";
 

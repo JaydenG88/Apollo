@@ -5,8 +5,8 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("pause")
         .setDescription("Pauses song"),
-    execute: async ({client, interaction}) => {
-        
+
+    execute: async ({ client, interaction }) => {
         const queue = client.player.nodes.get(interaction.guild);
         
         if (!queue) {
